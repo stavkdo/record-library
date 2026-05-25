@@ -18,15 +18,16 @@ CREATE TABLE library_table (
 );
 
 -- Records (albums / tracks)
--- Sourced from Discogs. `discogs_id` is the canonical Discogs release id;
--- the other columns are a local cache of release metadata so we don't
--- have to hit the Discogs API on every read.
+-- Sourced from Discogs OR entered manually. `discogs_id` is the canonical
+-- Discogs release id when available; manual entries have NULL. The UNIQUE
+-- constraint still prevents duplicate Discogs releases (PostgreSQL allows
+-- multiple NULLs in a UNIQUE column).
 CREATE TABLE record_table (
     r_id       BIGSERIAL    PRIMARY KEY,
-    discogs_id BIGINT       NOT NULL UNIQUE,
+    discogs_id BIGINT       UNIQUE,
     master_id  BIGINT,
     r_name     VARCHAR(255) NOT NULL,
-    artist     TEXT         NOT NULL,
+    artist     VARCHAR(255) NOT NULL,
     year       SMALLINT,
     thumb_url  TEXT,
     fetched_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()

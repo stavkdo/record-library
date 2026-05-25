@@ -2,7 +2,7 @@ import { type FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { Field } from '../components/Field';
-import { Logo } from '../components/Logo';
+import { Wordmark } from '../components/Wordmark';
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -30,11 +30,10 @@ export function LoginPage() {
     <div className="relative min-h-screen grid place-items-center px-6 bg-[#0a0a0d] overflow-hidden">
       <div className="absolute inset-0 bg-spotlight pointer-events-none" />
       <div className="relative w-full max-w-sm animate-fade-up">
-        <div className="flex flex-col items-center gap-3 mb-8">
-          <Logo size={48} />
-          <h1 className="font-display text-3xl font-extrabold text-brand-gradient tracking-tight">
-            Records Library
-          </h1>
+        <div className="flex flex-col items-center gap-4 mb-8">
+          <Link to="/" className="group">
+            <Wordmark size={40} />
+          </Link>
           <p className="text-zinc-400 text-sm">Sign in to your collection</p>
         </div>
         <form

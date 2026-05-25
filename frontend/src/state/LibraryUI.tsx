@@ -33,6 +33,8 @@ interface LibraryUIValue {
   openAddRecord: (l_id: number) => void;
   openAddMember: (l_id: number) => void;
   close: () => void;
+  renameLibrary: (l_id: number, l_name: string) => Promise<void>;
+  deleteLibrary: (l_id: number) => Promise<void>;
 }
 
 const Ctx = createContext<LibraryUIValue | null>(null);
@@ -64,6 +66,25 @@ export function LibraryUIProvider({ children }: { children: ReactNode }) {
     refresh();
   }, [refresh]);
 
+  const renameLibrary = useCallback(
+    async (l_id: number, l_name: string) => {
+      await api(`/libraries/${l_id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ l_name }),
+      });
+      await refresh();
+    },
+    [refresh],
+  );
+
+  const deleteLibrary = useCallback(
+    async (l_id: number) => {
+      await api(`/libraries/${l_id}`, { method: 'DELETE' });
+      await refresh();
+    },
+    [refresh],
+  );
+
   const value = useMemo<LibraryUIValue>(
     () => ({
       libraries,
@@ -76,8 +97,10 @@ export function LibraryUIProvider({ children }: { children: ReactNode }) {
       openAddRecord: (l_id) => setModal({ kind: 'add-record', l_id }),
       openAddMember: (l_id) => setModal({ kind: 'add-member', l_id }),
       close: () => setModal({ kind: 'none' }),
+      renameLibrary,
+      deleteLibrary,
     }),
-    [libraries, loading, loadError, refresh, modal],
+    [libraries, loading, loadError, refresh, modal, renameLibrary, deleteLibrary],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

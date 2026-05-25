@@ -1,6 +1,5 @@
 import { type FormEvent, useState } from 'react';
 import { api } from '../api/client';
-import { Modal } from '../components/Modal';
 import { Field } from '../components/Field';
 import { useLibraryUI } from '../state/LibraryUI';
 
@@ -36,8 +35,7 @@ export function CreateLibraryModal() {
   }
 
   return (
-    <Modal open={modal.kind === 'create'} onClose={handleClose}>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-w-md mx-auto pt-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-w-md mx-auto pt-4">
         <div>
           <h2 className="font-display text-3xl font-extrabold text-zinc-100 tracking-tight">
             New library
@@ -72,7 +70,6 @@ export function CreateLibraryModal() {
             {busy ? 'Creating…' : 'Create library'}
           </button>
         </div>
-      </form>
-    </Modal>
+    </form>
   );
 }

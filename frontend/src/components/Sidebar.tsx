@@ -9,18 +9,37 @@ const TILE_GRADIENTS = [
   'from-[#f97316] to-[#ef4444]',
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onNavigate?: () => void;
+}
+
+export function Sidebar({ isOpen = false, onNavigate }: SidebarProps) {
   const { libraries, loading, loadError, openCreate, openLibrary } = useLibraryUI();
 
+  function handleOpenCreate() {
+    openCreate();
+    onNavigate?.();
+  }
+
+  function handleOpenLibrary(l_id: number) {
+    openLibrary(l_id);
+    onNavigate?.();
+  }
+
   return (
-    <aside className="w-[340px] shrink-0 bg-[#0a0a0d] border-r border-white/[0.06] flex flex-col px-5 py-6 gap-6 overflow-y-auto">
+    <aside
+      className={`w-[300px] max-w-[85vw] md:w-[340px] shrink-0 bg-[#0a0a0d] border-r border-white/[0.06] flex flex-col px-5 py-6 gap-6 overflow-y-auto fixed md:static top-16 md:top-auto bottom-0 md:bottom-auto z-30 transition-transform duration-300 ease-out ${
+        isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}
+    >
       <section>
         <div className="flex items-center gap-3 mb-4 px-1">
           <h3 className="text-zinc-100 font-display font-bold text-base tracking-tight">
             Your Libraries
           </h3>
           <button
-            onClick={openCreate}
+            onClick={handleOpenCreate}
             className="ml-auto whitespace-nowrap px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-zinc-200 text-xs font-medium transition-all flex items-center gap-1.5"
           >
             <span className="text-base leading-none">+</span> New
@@ -46,7 +65,7 @@ export function Sidebar() {
               key={lib.l_id}
               lib={lib}
               gradient={TILE_GRADIENTS[i % TILE_GRADIENTS.length]}
-              onClick={() => openLibrary(lib.l_id)}
+              onClick={() => handleOpenLibrary(lib.l_id)}
             />
           ))}
         </div>
